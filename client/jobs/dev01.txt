@@ -1,0 +1,39 @@
+Software Developer
+
+Company
+
+GROCERY LOGISTICS OF SINGAPORE PTE LTD
+
+Roles & Responsibilities
+
+Meeting with software manager to discuss projects.
+Conduction software feasibility studies to upgraded software system.
+Reviewing updated software systems.
+Assigning task to junior developer such as coding, testing, debugging, 
+analytics.
+Managing project timeline and tasks. Design and develop overall 
+architecture of the application.
+Develop interface to integrate with other system.
+Maintain code integrity and collaborate with the team to design and 
+launch new features.
+Develop applications suitable for mobile and desktop interfaces.
+Documentation and maintenance of development version control.
+Maintain quality and ensure responsiveness of applications.
+Conduct User Acceptance Testing with key users.
+
+Job Requirements
+
+Bachelor’s Degree in Computer Science or Computer Engineering.
+2-3 years of experience in Software Development and experience in full 
+Software Development LifeCycle.
+Experience in NodeJS, Angular5 development
+Strong logical understanding of Microsoft SQL Server/Oracle/MongoDB 3.4: 
+Database concept design,query, stored procedure, etc.
+Knowledge in Shell Script, Ionic3, mobile app technologies and i
+nterface design is preferred
+Possess knowledge in Warehouse Management System (WMS) and Transport 
+Management System (TMS) will be advantages
+Strong problem solving and analytical skills.
+Passionate and strong interest in programming.
+Able to work independently.
+Ability to multitask and be a strong team player.

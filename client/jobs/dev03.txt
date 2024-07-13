@@ -1,0 +1,46 @@
+Software Developer
+
+Company
+
+LMA RECRUITMENT SINGAPORE PTE. LTD.
+
+Job Description
+
+This role is responsible for providing full support and accountability to 
+the Innovation Center in the area of software development, to jointly 
+develop innovative solutions for the new projects.
+
+Key Responsibilities
+
+Responsible for the prototype development of the team’s projects including 
+front-end and back-end, and assist the development and deployment tasks of 
+products.
+Document software development, plan and accompany implementation, 
+integration and testing of a software framework, flow or package.
+Complete code writing efficiently and with high quality according to work 
+arrangements, and can effectively cooperate with algorithm developers to 
+complete related tasks.
+Optimize the overall framework design and basic component development of 
+prototypes.
+Work with other teams and stakeholders to understand business needs, 
+document data and commercial requirements, and support as source of data 
+insights.
+Take on projects and/or other duties as assigned by the Supervisor/ 
+Department Head.
+
+Knowledge & Experience Required
+
+Degree holder in Computer Science / Software Engineering / Information 
+Technology, with at least 3 years of experience in front-end and back-end 
+development.
+Proficient in HTML5, CSS/CSS3, JavaScript and other front-end technologies.
+Proficient in front-end related frameworks such as React and FastAPI.
+Proficient in Redis, SQL, ElasticSearch and familiar with Python.
+Familiar with big data techniques and blockchain applications.
+Good understanding of development methodologies, testing practices, and 
+tools.
+Passionate about new technologies and highly motivated.
+Have good product awareness and the ability to work smoothly in teams.
+Able to write code independently with minimum reference to open source 
+code resources.
+A fast learner who is able to work independently and as a team.

@@ -1,0 +1,58 @@
+John A. Smith
+
+Profile
+
+A Senior Software Engineer with six years of professional experience, 
+specializing in fullstack development, MySQL, Oracle, and Python. A proven 
+track record of managing large scale software engineering projects to 
+support cloud deployments and integrations.
+
+Professional Experience
+
+Senior Software Engineer, Microsoft, Los Angeles, CA
+August 2019-Current
+
+Manage a software engineering team of 15+ personnel to build innovative 
+web applications using Agile-Waterfall methodologies, oversee all aspects 
+of  full-stack development, and identify opportunities to enhance the user 
+experience
+Identify creative solutions and workflow optimizations to improve 
+deployment timelines and reduce project roadblocks during development 
+lifecycles
+Serve as the Microsoft Azure SME for the software engineering department 
+and resolve escalated software issues from junior team members
+
+Software Engineer, Uber, Los Angeles, CA
+June 2017-August 2019
+
+Coordinated with a team of 30+ software engineers to re-engineer the 
+system into a PHP-based 3-tier application for a global rideshare company 
+with  300M users
+Supported projects to improve geo transit data application tools for 
+drivers 
+and users, which contributed to a 20% increase in user satisfaction
+
+Certifications
+
+MCPS: Microsoft Certified Professional
+LPIC-3 Senior Level Linux Certification
+Code Camp Trainer
+Oracle Certified Professional – Java SE Programmer
+Microsoft Certified Solutions Developer
+Google Certified Professional Cloud Architect
+Key Skills
+
+Application Development
+
+Java/Python/C++/Ruby/Perl/PHP/React/Angular
+Full-stack developer
+MySQL/Oracle/RedHat/AIX
+Analysis and visualization of data structures
+
+Education
+
+Master of Business Administration, Information Systems
+California State University, Long Beach, CA, September 2018 – July 2020
+
+Bachelor of Computer Science, Software Engineering Major
+University of California, Los Angeles, CA, August 2015 – July 2018, 4.0 GPA
