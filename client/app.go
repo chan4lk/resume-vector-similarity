@@ -1,107 +1,125 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
+	"context"
 	"fmt"
 	"io"
-	"math"
-	"net/http"
 	"os"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/pgvector/pgvector-go"
 )
 
-type EmbeddingResponse struct {
-	Embedding []float32 `json:"embedding"`
+type Job struct {
+	Id          int64
+	Title       string
+	Company     string
+	Description string
+	Embeddings  pgvector.Vector
 }
 
-type EmbeddingRequest struct {
-	Prompt string `json:"prompt"`
-}
-
-// get the embeddings given a piece of text
-func GetEmbeddings(text string) ([]float32, error) {
-	req := &EmbeddingRequest{
-		Prompt: text,
-	}
-
-	reqJson, err := json.Marshal(req)
+// add a new job
+func addJob(title, company, filepath string) error {
+	// open the job file and read the contents
+	file, err := os.Open(filepath)
 	if err != nil {
-		fmt.Println("err in marshaling:", err)
-		return []float32{}, err
+		return err
 	}
 
-	r := bytes.NewReader(reqJson)
-	httpResp, err := http.Post("http://localhost:11333/api/embeddings",
-		"application/json", r)
+	data, err := io.ReadAll(file)
 	if err != nil {
-		fmt.Println("err in calling embedding API server:", err)
-		return []float32{}, err
+		return err
 	}
-	data, err := io.ReadAll(httpResp.Body)
+
+	job := Job{
+		Title:       title,
+		Company:     company,
+		Description: string(data),
+	}
+
+	err = createJob(job)
 	if err != nil {
-		fmt.Println("err in reading:", err)
-		return []float32{}, err
+		return err
 	}
+	return nil
+}
 
-	resp := &EmbeddingResponse{}
-	err = json.Unmarshal(data, resp)
+func createJob(job Job) error {
+	ctx := context.Background()
+	embeddings, err := getEmbeddings(job.Description)
 	if err != nil {
-		fmt.Println("err in unmarshaling:", err)
-		return []float32{}, err
+		return err
 	}
 
-	return resp.Embedding, nil
+	conn, err := pgx.Connect(ctx, "postgres://localhost/jobsdb")
+	if err != nil {
+		return err
+	}
+	defer conn.Close(ctx)
+
+	_, err = conn.Exec(ctx, "INSERT INTO jobs (title, company, description, "+
+		"embeddings) VALUES ($1, $2, $3, $4)",
+		job.Title, job.Company, job.Description,
+		pgvector.NewVector(embeddings))
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-// cosine similarity of 2 float64 slices
-func similarity(a, b []float64) float64 {
-	return dotproduct(a, b) / (magnitude(a) * magnitude(b))
+func getJobs(cv string) ([]Job, []float64, error) {
+	ctx := context.Background()
+	conn, err := pgx.Connect(ctx, "postgres://localhost/jobsdb")
+	if err != nil {
+		return []Job{}, []float64{}, err
+	}
+	defer conn.Close(ctx)
+
+	embeddings, err := getEmbeddings(cv)
+	if err != nil {
+		return []Job{}, []float64{}, err
+	}
+	rows, err := conn.Query(ctx,
+		"SELECT id, title, company, description, "+
+			"(1 - (embeddings <=> $1)) as cosine_distance "+
+			"FROM jobs ORDER BY cosine_distance DESC LIMIT 5",
+		pgvector.NewVector(embeddings))
+	if err != nil {
+		return []Job{}, []float64{}, err
+	}
+	defer rows.Close()
+	var jobs []Job
+	var distances []float64
+	for rows.Next() {
+		var job Job
+		var distance float64
+		err = rows.Scan(&job.Id, &job.Title, &job.Company, &job.Description,
+			&distance)
+		if err != nil {
+			return []Job{}, []float64{}, err
+		}
+		jobs = append(jobs, job)
+		distances = append(distances, distance)
+	}
+	if rows.Err() != nil {
+		return []Job{}, []float64{}, err
+	}
+	return jobs, distances, nil
 }
 
-// dot product of 2 float64 slices
-func dotproduct(a, b []float64) float64 {
-	if len(a) != len(b) {
-		return 0.0
-	}
-
-	var dp float64
-	for i := 0; i < len(a); i++ {
-		dp += a[i] * b[i]
-	}
-	return dp
+func addJobs() {
+	addJob("Software Developer", "MSI GLOBAL PRIVATE LIMITED", "./jobs/dev01.txt")
+	addJob("Software Developer", "LMA RECRUITMENT SINGAPORE PTE. LTD.", "./jobs/dev02.txt")
+	addJob("Software Developer", "GROCERY LOGISTICS OF SINGAPORE PTE LTD", "./jobs/dev03.txt")
+	addJob("Nurse", "MSI GLOBAL PRIVATE LIMITED", "./jobs/nurse01.txt")
 }
 
-// magnitude of a float64 slice
-func magnitude(a []float64) float64 {
-	var mag float64
-	for i := 0; i < len(a); i++ {
-		mag += math.Pow(a[i], 2.0)
+func main() {
+	file, _ := os.Open("./cvs/dev01.txt")
+	cv, _ := io.ReadAll(file)
+	jobs, distances, _ := getJobs(string(cv))
+
+	for i, job := range jobs {
+		fmt.Printf("%s (%s), %.3f\n", job.Title, job.Company, distances[i])
 	}
-	return mag
-}
-
-func test() {
-	cvfile, _ := os.Open("cvs/dev01.txt")
-	cv, _ := io.ReadAll(cvfile)
-	cvEmbeddings, _ := GetEmbeddings(string(cv))
-	float64CV := toF64(cvEmbeddings)
-
-	jobfile, _ := os.Open("jobs/dev04.txt")
-	job, _ := io.ReadAll(jobfile)
-	jobEmbeddings, _ := GetEmbeddings(string(job))
-	float64Job := make([]float64, len(jobEmbeddings))
-	for i, val := range jobEmbeddings {
-		float64Job[i] = float64(val)
-	}
-
-	sim := similarity(float64CV, float64Job)
-	fmt.Println(sim)
-}
-
-func toF64(cvEmbeddings []float32) []float64 {
-	float64CV := make([]float64, len(cvEmbeddings))
-	for i, val := range cvEmbeddings {
-		float64CV[i] = float64(val)
-	}
-	return float64CV
 }
